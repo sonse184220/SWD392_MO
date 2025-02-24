@@ -1,12 +1,13 @@
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { View, Image, StyleSheet } from "react-native";
 import { NavigationIndependentTree } from "@react-navigation/native";
 import Navbar from './components/Navbar';
+import registerNNPushToken from 'native-notify';
+
 
 
 export default function Index() {
+  registerNNPushToken(27771, '8wm6XkyNOLVg4SuWcD35Iw');
   return (
     <NavigationIndependentTree>
       <NavigationContainer>
