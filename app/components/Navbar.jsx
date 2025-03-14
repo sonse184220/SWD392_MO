@@ -5,22 +5,22 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Home from "./Home";
 import Fav from "./Fav";
 import GMap from "./GMap";
-import Blog from "./Blog";
+import { auth } from "./Firebase/FirebaseConfig"; 
 import Profile from "./Profile";
 
 export default function Navbar() {
   const Tab = createBottomTabNavigator();
   const [user, setUser] = useState(null);
-  const auth = getAuth();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);
-    return () => unsubscribe(); // Cleanup listener
+    return () => unsubscribe(); 
   }, []);
 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        headerShown: false,
         tabBarIcon: ({ focused }) => {
           const icons = {
             Home: focused
