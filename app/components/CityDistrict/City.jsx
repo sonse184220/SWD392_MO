@@ -61,16 +61,18 @@ const City = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View className="flex flex-1" style={styles.container}>
+            <View style={{marginBottom: 10, width: 150, marginLeft: 80}}>
             <Button title="+ Add City" onPress={() => openModal()} />
-            <FlatList
+            </View>
+            <FlatList className="bg-white" 
                 data={cities}
                 keyExtractor={(item) => item.cityId.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.itemContainer}>
-                        <Text>ID: {item.cityId}</Text>
-                        <Text>Name: {item.name}</Text>
-                        <Text>Description: {item.description}</Text>
+                        <Text className="text-2xl" style={{fontWeight: "bold"}} >ID: {item.cityId}</Text>
+                        <Text style={{fontSize: 20}} >Name: {item.name}</Text>
+                        <Text style={{fontSize: 20}}>Description: {item.description}</Text>
                         <View style={styles.actions}>
                             <TouchableOpacity onPress={() => openModal(item)}>
                                 <Text style={styles.editButton}>Edit</Text>
@@ -85,6 +87,7 @@ const City = () => {
 
             <Modal visible={isOpen} animationType="slide" transparent={true}>
                 <View style={styles.modalContainer}>
+                <Text className="text-3xl text-center" style={{marginBottom: 10}} >Create City</Text>
                     <TextInput placeholder="Enter city name" value={name} onChangeText={setName} style={styles.input} />
                     <TextInput placeholder="Enter description" value={description} onChangeText={setDescription} style={styles.input} />
                     <View style={styles.modalButtons}>
@@ -100,12 +103,12 @@ const City = () => {
 const styles = StyleSheet.create({
     container: { padding: 20 },
     itemContainer: { marginBottom: 15, padding: 10, borderWidth: 1, borderRadius: 8 },
-    actions: { flexDirection: "row", justifyContent: "space-between", marginTop: 10 },
-    editButton: { color: "white", backgroundColor: "blue", fontWeight: "bold", borderRadius: 8, paddingVertical: 8, paddingHorizontal: 12, marginHorizontal: 5 },
-  deleteButton: { color: "white", backgroundColor: "red", fontWeight: "bold", borderRadius: 8, paddingVertical: 8, paddingHorizontal: 12, marginHorizontal: 5 },
-    modalContainer: { flex: 1, justifyContent: "center", padding: 20, backgroundColor: "rgba(0,0,0,0.5)" },
-    input: { backgroundColor: "white", marginBottom: 15, padding: 10, borderRadius: 8 },
-    modalButtons: { flexDirection: "row", justifyContent: "space-between" }
+    actions: { flexDirection: "row", justifyContent: "flex-end", marginTop: 10 },
+    editButton: { color: "white", backgroundColor: "blue", fontWeight: "bold", borderRadius: 8, paddingVertical: 8, paddingHorizontal: 12, marginHorizontal: 5, width: 60, textAlign: "center" },
+    deleteButton: { color: "white", backgroundColor: "red", fontWeight: "bold", borderRadius: 8, paddingVertical: 8, paddingHorizontal: 12, marginHorizontal: 5, },
+    modalContainer: {justifyContent: "center",marginLeft: 30, marginTop: 200, backgroundColor: "white", width: 300, height: 250, borderRadius: 15, borderStyle: "solid", borderWidth: 1	 },
+    input: { backgroundColor: "white", padding: 10, borderRadius: 8, borderWidth: 1, margin: 10 },
+    modalButtons: { flexDirection: "row", justifyContent: "flex-end", gap: 10, marginRight: 15, paddingTop: 20  }
 });
 
 export default City;
