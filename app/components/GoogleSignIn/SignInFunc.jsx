@@ -1,6 +1,7 @@
 import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import {auth} from '../Firebase/FirebaseConfig';
+import { login } from '@/app/Service/authService'; 
 
 export default async function GGSignIn() {
     try {
@@ -11,6 +12,7 @@ export default async function GGSignIn() {
 
         // Try the new style of google-sign in result, from v13+ of that module
         idToken = signInResult.data?.idToken;
+        
         if (!idToken) {
             // if you are using older versions of google-signin, try old style result
             idToken = signInResult.idToken;
@@ -18,7 +20,10 @@ export default async function GGSignIn() {
         if (!idToken) {
             throw new Error('No ID token found');
         }
-
+        console.log(idToken);
+        const sendAuth = await login(idToken);
+        if (!sendAuth.ok) throw new Error("Authentication failed");
+        console.log(sendAuth);
 
         // Create a Google credential with the token
         const googleCredential = GoogleAuthProvider.credential(idToken);

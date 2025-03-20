@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-    baseURL: 'https://32d0-2405-4802-90db-3b70-794b-f600-8e3-3851.ngrok-free.app/',
+    baseURL: 'https://e86e-2405-4802-9071-52b0-61ce-906-fd81-fb98.ngrok-free.app/',
 });

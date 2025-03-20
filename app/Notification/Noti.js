@@ -1,10 +1,6 @@
-import React, { useEffect } from "react";
 import { View, Button, Alert } from "react-native";
-import registerNNPushToken from "native-notify";
 
-const NotificationButton = () => {
-    registerNNPushToken(28377, 'Th8WOlG5eds2MxaDYrC6KT');
-    const sendNotification = async () => {
+ export const sendNotification = async () => {
         try {
             const response = await fetch("https://app.nativenotify.com/api/notification", {
                 method: "POST",
@@ -35,12 +31,3 @@ const NotificationButton = () => {
         }
     };
 
-
-    return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Button title="Send Notification" onPress={sendNotification} />
-        </View>
-    );
-};
-
-export default NotificationButton;

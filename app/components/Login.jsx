@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, View, ImageBackground, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { SafeAreaView, View, ImageBackground, StyleSheet, StatusBar, TouchableOpacity } from "react-native";
+import { Text, Button, ActivityIndicator, Avatar, Surface } from 'react-native-paper';
+import { Facebook, Mail, LogIn } from 'lucide-react-native';
 import { auth } from "./Firebase/FirebaseConfig"; 
 import GoogleConfig from './GoogleSignIn/Configure';
 import GGSignIn from './GoogleSignIn/SignInFunc';
 
 function Login({ navigation }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Listen for auth state changes
@@ -20,6 +23,7 @@ function Login({ navigation }) {
   }, []);
 
   const loginWithGG = async () => {
+    setLoading(true);
     try {
       GoogleConfig(); 
       const user = await GGSignIn();
@@ -32,40 +36,79 @@ function Login({ navigation }) {
     } catch (error) {
       console.error("Google Sign-In Error:", error.message);
       alert("Google Sign-In Failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar translucent backgroundColor="transparent" />
       <ImageBackground 
         source={{ uri: "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/f152bc62-b0d8-4103-b7db-ddc5e90db9ca" }}
         resizeMode="cover"
         style={styles.background}
       >
-        <View style={styles.content}>
-          <Text style={styles.title}>CITYSCOUT!</Text>
-          <Text style={styles.subtitle}>EXPLORE</Text>
-          <Text style={styles.tagline}>THE CITY</Text>
-          <Image 
-            source={{ uri: "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/98cfb51d-6610-4d4a-bc96-e9d4006b9b07" }}
-            style={styles.logo}
-          />
+        <View style={styles.overlay}>
+          <View style={styles.topSection}>
+            <Avatar.Image 
+              size={100} 
+              source={{ uri: "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/98cfb51d-6610-4d4a-bc96-e9d4006b9b07" }}
+              style={styles.logo}
+            />
+          </View>
           
-          <TouchableOpacity style={styles.button}>
-            <Image 
-              source={{ uri: "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e0102072-f10e-4d23-a86c-47978320ea79" }} 
-              style={styles.icon} 
-            />
-            <Text style={styles.buttonText}>Continue with Facebook</Text>
-          </TouchableOpacity>
+          <Surface style={styles.content}>
+            <Text style={styles.title}>CITYSCOUT!</Text>
+            <Text style={styles.subtitle}>EXPLORE <Text style={styles.tagline}>THE CITY</Text></Text>
+            
+            <Text style={styles.description}>
+              Discover amazing places, find best deals, and create unforgettable memories with CityScout.
+            </Text>
+            
+            <Button 
+              mode="contained" 
+              icon={({size, color}) => <Facebook size={20} color={color} />}
+              style={styles.facebookButton}
+              labelStyle={styles.buttonLabel}
+              contentStyle={styles.buttonContent}
+            >
+              Continue with Facebook
+            </Button>
 
-          <TouchableOpacity style={styles.button} onPress={loginWithGG}>
-            <Image 
-              source={{ uri: "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/753bf365-2641-459a-8733-e6b69276d462" }} 
-              style={styles.icon} 
-            />
-            <Text style={styles.buttonText}>Continue with Google</Text>
-          </TouchableOpacity>
+            <Button 
+              mode="outlined"
+              icon={({size, color}) => (
+                loading ? <ActivityIndicator size={20} color="#FF475F" /> : 
+                <Avatar.Image size={20} source={{ uri: "https://img.icons8.com/color/96/google-logo.png" }} />
+              )}
+              onPress={loginWithGG}
+              disabled={loading}
+              style={styles.googleButton}
+              labelStyle={styles.googleButtonLabel}
+              contentStyle={styles.buttonContent}
+            >
+              {loading ? "Signing in..." : "Continue with Google"}
+            </Button>
+            
+            <Button 
+              mode="text"
+              icon={({size, color}) => <Mail size={18} color={color} />}
+              style={styles.emailButton}
+              labelStyle={styles.emailButtonLabel}
+            >
+              Sign in with email instead
+            </Button>
+            
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>
+                Don't have an account?{" "}
+                <Text style={styles.footerLink} onPress={() => alert("Sign up coming soon!")}>
+                  Sign up
+                </Text>
+              </Text>
+            </View>
+          </Surface>
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -73,43 +116,104 @@ function Login({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { 
+    flex: 1 
+  },
   background: {
     flex: 1,
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: "space-between",
+  },
+  topSection: {
     alignItems: "center",
-    justifyContent: "flex-end",
-    paddingBottom: 50,
+    paddingTop: 60,
+  },
+  logo: { 
+    borderWidth: 2,
+    borderColor: "rgba(255,255,255,0.6)",
+    backgroundColor: "rgba(255,255,255,0.3)",
   },
   content: {
     alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    padding: 30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    elevation: 8,
+  },
+  title: { 
+    fontSize: 28, 
+    fontWeight: "bold", 
+    color: "#FF475F", 
+    marginBottom: 5 
+  },
+  subtitle: { 
+    fontSize: 26, 
+    fontWeight: "bold", 
+    color: "#000",
+    marginBottom: 15,
+  },
+  tagline: { 
+    fontSize: 26, 
+    fontWeight: "bold", 
+    color: "#555" 
+  },
+  description: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+    marginBottom: 30,
+    paddingHorizontal: 20,
+  },
+  facebookButton: {
     width: "100%",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
+    marginVertical: 8,
+    backgroundColor: "#4267B2",
+    borderRadius: 12,
+    elevation: 2,
   },
-  title: { fontSize: 28, fontWeight: "bold", color: "#000" },
-  subtitle: { fontSize: 32, fontWeight: "bold", color: "#000" },
-  tagline: { fontSize: 18, color: "#000", marginBottom: 10 },
-  logo: { width: 80, height: 80, marginBottom: 20 },
-  button: {
-    flexDirection: "row",
-    alignItems: "center",
+  googleButton: {
+    width: "100%",
+    marginVertical: 8,
+    borderColor: "#ddd",
+    borderRadius: 12,
     backgroundColor: "#fff",
-    padding: 12,
-    borderRadius: 10,
-    marginVertical: 5,
-    width: "90%",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "#ccc",
+    elevation: 2,
   },
-  icon: { width: 20, height: 20, marginRight: 10 },
-  buttonText: { fontSize: 16, fontWeight: "bold" },
+  emailButton: {
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  buttonContent: {
+    height: 50,
+    justifyContent: "center",
+  },
+  buttonLabel: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  googleButtonLabel: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#555",
+  },
+  emailButtonLabel: {
+    fontSize: 14,
+    color: "#FF475F",
+  },
+  footer: {
+    marginTop: 30,
+  },
+  footerText: {
+    fontSize: 14,
+    color: "#666",
+  },
+  footerLink: {
+    fontWeight: "bold",
+    color: "#FF475F",
+  }
 });
 
 export default Login;

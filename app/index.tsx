@@ -6,26 +6,22 @@ import Navbar from './components/Navbar';
 import registerNNPushToken from 'native-notify';
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from './components/Login';
-import Test from './Service/Test';
-import District from './components/CityDistrict/District';
+import AdminPage from './components/admin/AdminPage';
 import Map from './components/CityDistrict/Map';
-import NotificationButton from './Notification/Noti';
-
 
 const Stack = createStackNavigator();
 export default function Index() {
-  
+  registerNNPushToken(28377, 'Th8WOlG5eds2MxaDYrC6KT');
   return (
     
-    // <NavigationIndependentTree>
-    //   <NavigationContainer>
-    //   <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
-    //     <Stack.Screen name="Login" component={Login} />
-    //     <Stack.Screen name="HomeTabs" component={Navbar} />
-    //   </Stack.Navigator>
-    //   </NavigationContainer>
-    // </NavigationIndependentTree>
-    <NotificationButton/>
+    <NavigationIndependentTree>
+      <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="HomeTabs" component={Navbar} />
+      </Stack.Navigator>
+      </NavigationContainer>
+    </NavigationIndependentTree>  
   );
 }
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, Image, StyleSheet } from "react-native";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { View, StyleSheet } from "react-native";
+import { onAuthStateChanged } from "firebase/auth";
+import { Icon } from "react-native-paper";
 import Home from "./Home";
 import Fav from "./Fav";
 import GMap from "./GMap";
@@ -14,7 +15,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);
-    return () => unsubscribe(); 
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -23,23 +24,19 @@ export default function Navbar() {
         headerShown: false,
         tabBarIcon: ({ focused }) => {
           const icons = {
-            Home: focused
-              ? "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/1041db3a-ffe6-4070-b6f8-1b66eb90d058"
-              : "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/ee45001b-08af-45de-ba4e-1e3de5330d87",
-            Map: focused
-              ? "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/8a420761-95a9-4e0a-b837-cfca2304b5df"
-              : "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/55b95c3b-bf2d-42c1-95e3-97a8eda00b22",
-            Favorite: focused
-              ? "https://img.icons8.com/?size=100&id=7697&format=png&color=000000"
-              : "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/a7f41ec5-5961-40b6-917d-d03a75968bc8",
-            Profile: user?.photoURL || "https://via.placeholder.com/150",
+            Home: "home",
+            Map: "map",
+            Favorite: "heart",
+            Profile: "account",
           };
 
           return (
             <View style={[styles.iconContainer, focused && styles.activeIconContainer]}>
-              <Image
-                source={{ uri: icons[route.name] }}
-                style={[styles.icon, focused && styles.activeIcon]}
+              <Icon 
+                source={icons[route.name]} 
+                size={28} 
+                color={focused ? "#FFFFFF" : "#666"} 
+                style={focused && styles.activeIcon} 
               />
             </View>
           );
@@ -79,13 +76,8 @@ const styles = StyleSheet.create({
   activeIconContainer: {
     backgroundColor: "#E81948",
   },
-  icon: {
-    width: 28,
-    height: 28,
-    opacity: 0.6,
-  },
   activeIcon: {
     opacity: 1,
-    tintColor: "#FFFFFF",
   },
 });
+
